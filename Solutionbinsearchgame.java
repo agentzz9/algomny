@@ -54,31 +54,36 @@ class TestClass {
 
 			int count = 0;
 			int low = 0;
-			int high = M-1;
+			int high = M - 1;
 			int mid;
 			boolean found = false;
 			int lastIndex = 0;
-			while(low<=high){
-				mid =(low+high)/2;
+			while (low <= high) {
+				mid = (low + high) / 2;
 				lastIndex = mid;
-				if(imonkListSorted.get(mid) == monkList.get(i)){
+				if (monkList.get(i) == imonkListSorted.get(mid)) {
 					found = true;
-				
-				}
-				else if(imonkListSorted.get(mid) > monkList.get(i)){
-					low = mid + 1;
-					
-				}else
-				{
+				} else if (monkList.get(i) < imonkListSorted.get(mid)) {
 					high = mid - 1;
+
+				} else {
+					low = mid + 1;
 				}
 			}
-			
-			count = M-lastIndex-1;
-			
+			if (found) { // landed at equal element. move to rightmost dup element, take next onwards
+				while(imonkListSorted.get(lastIndex)!=imonkListSorted.get(lastIndex+1)){
+					lastIndex++;
+				}
+				count = M - lastIndex - 1;
+
+				
+			} else {	// take including this.
+				count = M - lastIndex;
+			}
+
 			monkF.add(count);
-			monkG.add(M-count);
-			
+			monkG.add(M - count);
+
 			monkV.add(monkG.get(i) * monkF.get(i));
 			sum += monkV.get(i);
 		}
@@ -90,34 +95,40 @@ class TestClass {
 
 			int count = 0;
 			int low = 0;
-			int high = N-1;
+			int high = N - 1;
 			int mid;
 			boolean found = false;
 			int lastIndex = 0;
-			while(low<=high){
-				mid =(low+high)/2;
+			while (low <= high) {
+				mid = (low + high) / 2;
 				lastIndex = mid;
-				if(monkListSorted.get(mid) == imonkList.get(i)){
+				if (imonkList.get(i) == monkListSorted.get(mid)) {
 					found = true;
-				
-				}
-				else if(monkListSorted.get(mid) > imonkList.get(i)){
-					low = mid + 1;
-					
-				}else
-				{
+
+				} else if (imonkList.get(i) < monkListSorted.get(mid)) {
 					high = mid - 1;
+
+				} else {
+					low = mid + 1;
 				}
 			}
-			
-			count = N-lastIndex-1;
-			
+			if (found) { // landed at equal element. move to rightmost dup element, take next onwards
+				while(monkListSorted.get(lastIndex)!=monkListSorted.get(lastIndex+1)){
+					lastIndex++;
+				}
+				count = N - lastIndex - 1;
+
+				
+			} else {	// take including this.
+				count = N - lastIndex;
+			}
+
 			imonkF.add(count);
-			imonkG.add(N-count);
-			
+			imonkG.add(N - count);
+
 			imonkV.add(imonkG.get(i) * imonkF.get(i));
 			sum += imonkV.get(i);
-			
+
 		}
 		imonkScore = sum;
 
