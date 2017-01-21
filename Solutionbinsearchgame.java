@@ -19,21 +19,19 @@ import java.io.InputStreamReader;
 
 public class Solution {
 
-	public static int indexOfFirstLargerElement(int x, List<Integer> theSortedList) {
+	public static int gCount(int x, List<Integer> theSortedList) {
 
 		int len = theSortedList.size();
 
 		int low = 0;
 		int high = len - 1;
-		int mid = low;
-		int idx;
+		int mid = -1;
+		int idx = -1;
 		while (low <= high) {
 			mid = (low + high) / 2;
 
 			if (x >= theSortedList.get(mid)) {
-			//	while (mid + 1 < len && theSortedList.get(mid + 1) == theSortedList.get(mid)) {
-				//	mid++;
-				//}
+			
 				idx = mid;
 				low = mid+1;
 			} else if (x < theSortedList.get(mid)) {
@@ -41,47 +39,12 @@ public class Solution {
 			} 
 
 		}
-		//System.out.println(low);
-		//System.out.println(high);
-		//System.out.print(mid);
-		List<Integer> lis = new ArrayList<Integer>(Arrays.asList(low,mid,high));
-		Collections.sort(lis);
-		
-		return lis.get(2);
 
+		return len -idx -1;
+		
 	}
 
 	public static void main(String args[]) throws Exception {
-		/*
-			System.out.println(indexOfFirstLargerElement(1, new ArrayList<Integer>(Arrays.asList(0))) == 1);
-		System.out.println(indexOfFirstLargerElement(1, new ArrayList<Integer>(Arrays.asList(5))) == 0);
-			System.out.println(indexOfFirstLargerElement(1, new ArrayList<Integer>(Arrays.asList(1))) == 1);
-			System.out.println(indexOfFirstLargerElement(1, new ArrayList<Integer>(Arrays.asList(0, 1))) == 2);
-			System.out.println(indexOfFirstLargerElement(0, new ArrayList<Integer>(Arrays.asList(0))) == 1);
-		System.out.println(indexOfFirstLargerElement(0, new ArrayList<Integer>(Arrays.asList(5))) == 0);
-		System.out.println(indexOfFirstLargerElement(0, new ArrayList<Integer>(Arrays.asList(1))) == 0);
-		System.out.println(indexOfFirstLargerElement(0, new ArrayList<Integer>(Arrays.asList(0, 1))) == 1);
-		System.out.println(indexOfFirstLargerElement(1, new ArrayList<Integer>(Arrays.asList(0, 5))) == 1);
-		System.out.println(indexOfFirstLargerElement(3, new ArrayList<Integer>(Arrays.asList(0, 5))) == 1);
-		System.out.println(indexOfFirstLargerElement(0, new ArrayList<Integer>(Arrays.asList(1, 3))) == 0);
-		
-			System.out.println(indexOfFirstLargerElement(5, new ArrayList<Integer>(Arrays.asList(1, 3))) == 2);
-		
-		System.out.println(indexOfFirstLargerElement(0, new ArrayList<Integer>(Arrays.asList(1, 2, 3, 4, 5))) == 0);
-		
-			System.out.println(indexOfFirstLargerElement(5, new ArrayList<Integer>(Arrays.asList(1, 2, 3, 4, 5))) == 5);
-		
-		System.out.println(indexOfFirstLargerElement(1, new ArrayList<Integer>(Arrays.asList(1, 2, 3, 4, 5))) == 1);
-		System.out.println(indexOfFirstLargerElement(3, new ArrayList<Integer>(Arrays.asList(1, 2, 3, 4, 5))) == 3);
-		System.out.println(indexOfFirstLargerElement(4, new ArrayList<Integer>(Arrays.asList(1, 2, 3, 4, 5))) == 4);
-		
-			System.out.println(indexOfFirstLargerElement(6, new ArrayList<Integer>(Arrays.asList(1, 2, 3, 4, 5))) == 5);
-		
-		System.out.println(indexOfFirstLargerElement(2, new ArrayList<Integer>(Arrays.asList(1, 2, 2, 4, 5))) == 3);
-		
-		System.exit(0);
-		
-		*/
 
 		Scanner s = new Scanner(System.in);
 		int N = s.nextInt();
@@ -115,16 +78,7 @@ public class Solution {
 		long sum = 0;
 		for (int i = 0; i < N; i++) {
 
-			int gcount;
-			int ind = indexOfFirstLargerElement(monkList.get(i), imonkListSorted);
-			if(ind <=0 ){
-				gcount = M;
-			}else if(ind >= M){
-				gcount = 0;
-			}
-			else{
-				gcount = M - ind;
-			}
+			int gcount = gCount(monkList.get(i), imonkListSorted);
 			
 			monkF.add(M-gcount);
 			monkG.add(gcount);
@@ -138,16 +92,7 @@ public class Solution {
 		sum = 0;
 		for (int i = 0; i < M; i++) {
 
-			int gcount;
-			int ind = indexOfFirstLargerElement(imonkList.get(i), monkListSorted);
-			if(ind <=0 ){
-				gcount = N;
-			}else if(ind >= N){
-				gcount = 0;
-			}
-			else{
-				gcount = N - ind;
-			}
+			int gcount = gCount(imonkList.get(i), monkListSorted);
 			
 			imonkF.add(N-gcount);
 			imonkG.add(gcount);
