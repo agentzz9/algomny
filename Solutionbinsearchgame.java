@@ -1,7 +1,11 @@
+package mypackage;
+
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
+
 
 /* IMPORTANT: Multiple classes and nested static classes are supported */
 
@@ -13,30 +17,89 @@ import java.io.InputStreamReader;
 
 */
 
-class TestClass {
+public class Solution {
+
+	public static int indexOfFirstLargerElement(int x, List<Integer> theSortedList) {
+
+		int len = theSortedList.size();
+
+		int low = 0;
+		int high = len - 1;
+		int mid = low;
+		int idx;
+		while (low <= high) {
+			mid = (low + high) / 2;
+
+			if (x >= theSortedList.get(mid)) {
+			//	while (mid + 1 < len && theSortedList.get(mid + 1) == theSortedList.get(mid)) {
+				//	mid++;
+				//}
+				idx = mid;
+				low = mid+1;
+			} else if (x < theSortedList.get(mid)) {
+				high = mid - 1;
+			} 
+
+		}
+		//System.out.println(low);
+		//System.out.println(high);
+		//System.out.print(mid);
+		List<Integer> lis = new ArrayList<Integer>(Arrays.asList(low,mid,high));
+		Collections.sort(lis);
+		
+		return lis.get(2);
+
+	}
+
 	public static void main(String args[]) throws Exception {
+		/*
+			System.out.println(indexOfFirstLargerElement(1, new ArrayList<Integer>(Arrays.asList(0))) == 1);
+		System.out.println(indexOfFirstLargerElement(1, new ArrayList<Integer>(Arrays.asList(5))) == 0);
+			System.out.println(indexOfFirstLargerElement(1, new ArrayList<Integer>(Arrays.asList(1))) == 1);
+			System.out.println(indexOfFirstLargerElement(1, new ArrayList<Integer>(Arrays.asList(0, 1))) == 2);
+			System.out.println(indexOfFirstLargerElement(0, new ArrayList<Integer>(Arrays.asList(0))) == 1);
+		System.out.println(indexOfFirstLargerElement(0, new ArrayList<Integer>(Arrays.asList(5))) == 0);
+		System.out.println(indexOfFirstLargerElement(0, new ArrayList<Integer>(Arrays.asList(1))) == 0);
+		System.out.println(indexOfFirstLargerElement(0, new ArrayList<Integer>(Arrays.asList(0, 1))) == 1);
+		System.out.println(indexOfFirstLargerElement(1, new ArrayList<Integer>(Arrays.asList(0, 5))) == 1);
+		System.out.println(indexOfFirstLargerElement(3, new ArrayList<Integer>(Arrays.asList(0, 5))) == 1);
+		System.out.println(indexOfFirstLargerElement(0, new ArrayList<Integer>(Arrays.asList(1, 3))) == 0);
+		
+			System.out.println(indexOfFirstLargerElement(5, new ArrayList<Integer>(Arrays.asList(1, 3))) == 2);
+		
+		System.out.println(indexOfFirstLargerElement(0, new ArrayList<Integer>(Arrays.asList(1, 2, 3, 4, 5))) == 0);
+		
+			System.out.println(indexOfFirstLargerElement(5, new ArrayList<Integer>(Arrays.asList(1, 2, 3, 4, 5))) == 5);
+		
+		System.out.println(indexOfFirstLargerElement(1, new ArrayList<Integer>(Arrays.asList(1, 2, 3, 4, 5))) == 1);
+		System.out.println(indexOfFirstLargerElement(3, new ArrayList<Integer>(Arrays.asList(1, 2, 3, 4, 5))) == 3);
+		System.out.println(indexOfFirstLargerElement(4, new ArrayList<Integer>(Arrays.asList(1, 2, 3, 4, 5))) == 4);
+		
+			System.out.println(indexOfFirstLargerElement(6, new ArrayList<Integer>(Arrays.asList(1, 2, 3, 4, 5))) == 5);
+		
+		System.out.println(indexOfFirstLargerElement(2, new ArrayList<Integer>(Arrays.asList(1, 2, 2, 4, 5))) == 3);
+		
+		System.exit(0);
+		
+		*/
 
 		Scanner s = new Scanner(System.in);
 		int N = s.nextInt();
 		int M = s.nextInt();
 		List<Integer> monkList = new ArrayList<Integer>();
 		List<Integer> imonkList = new ArrayList<Integer>();
-
 		List<Integer> monkListSorted = new ArrayList<Integer>();
 		List<Integer> imonkListSorted = new ArrayList<Integer>();
-
 		List<Integer> monkF = new ArrayList<Integer>();
 		List<Integer> imonkF = new ArrayList<Integer>();
-
 		List<Integer> monkG = new ArrayList<Integer>();
 		List<Integer> imonkG = new ArrayList<Integer>();
-
 		List<Integer> monkV = new ArrayList<Integer>();
 		List<Integer> imonkV = new ArrayList<Integer>();
 
-		int monkScore = -1;
-		int imonkScore = -1;
-
+		long monkScore = -1;
+		long imonkScore = -1;
+		
 		for (int i = 0; i < N; i++) {
 			monkList.add(s.nextInt());
 		}
@@ -49,40 +112,22 @@ class TestClass {
 		Collections.sort(imonkListSorted);
 
 		// Monk
-		int sum = 0;
+		long sum = 0;
 		for (int i = 0; i < N; i++) {
 
-			int count = 0;
-			int low = 0;
-			int high = M - 1;
-			int mid;
-			boolean found = false;
-			int lastIndex = 0;
-			while (low <= high) {
-				mid = (low + high) / 2;
-				lastIndex = mid;
-				if (monkList.get(i) == imonkListSorted.get(mid)) {
-					found = true;
-				} else if (monkList.get(i) < imonkListSorted.get(mid)) {
-					high = mid - 1;
-
-				} else {
-					low = mid + 1;
-				}
+			int gcount;
+			int ind = indexOfFirstLargerElement(monkList.get(i), imonkListSorted);
+			if(ind <=0 ){
+				gcount = M;
+			}else if(ind >= M){
+				gcount = 0;
 			}
-			if (found) { // landed at equal element. move to rightmost dup element, take next onwards
-				while(imonkListSorted.get(lastIndex)!=imonkListSorted.get(lastIndex+1)){
-					lastIndex++;
-				}
-				count = M - lastIndex - 1;
-
-				
-			} else {	// take including this.
-				count = M - lastIndex;
+			else{
+				gcount = M - ind;
 			}
-
-			monkF.add(count);
-			monkG.add(M - count);
+			
+			monkF.add(M-gcount);
+			monkG.add(gcount);
 
 			monkV.add(monkG.get(i) * monkF.get(i));
 			sum += monkV.get(i);
@@ -93,38 +138,19 @@ class TestClass {
 		sum = 0;
 		for (int i = 0; i < M; i++) {
 
-			int count = 0;
-			int low = 0;
-			int high = N - 1;
-			int mid;
-			boolean found = false;
-			int lastIndex = 0;
-			while (low <= high) {
-				mid = (low + high) / 2;
-				lastIndex = mid;
-				if (imonkList.get(i) == monkListSorted.get(mid)) {
-					found = true;
-
-				} else if (imonkList.get(i) < monkListSorted.get(mid)) {
-					high = mid - 1;
-
-				} else {
-					low = mid + 1;
-				}
+			int gcount;
+			int ind = indexOfFirstLargerElement(imonkList.get(i), monkListSorted);
+			if(ind <=0 ){
+				gcount = N;
+			}else if(ind >= N){
+				gcount = 0;
 			}
-			if (found) { // landed at equal element. move to rightmost dup element, take next onwards
-				while(monkListSorted.get(lastIndex)!=monkListSorted.get(lastIndex+1)){
-					lastIndex++;
-				}
-				count = N - lastIndex - 1;
-
-				
-			} else {	// take including this.
-				count = N - lastIndex;
+			else{
+				gcount = N - ind;
 			}
-
-			imonkF.add(count);
-			imonkG.add(N - count);
+			
+			imonkF.add(N-gcount);
+			imonkG.add(gcount);
 
 			imonkV.add(imonkG.get(i) * imonkF.get(i));
 			sum += imonkV.get(i);
@@ -151,4 +177,5 @@ class TestClass {
 		 */
 
 	}
+	
 }
