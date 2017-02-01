@@ -9,6 +9,11 @@ public class Solutionpt07x {
 	private static List<Integer>[] tree;
 
 	public static int getVertexCover(int root, boolean withRoot, Map<Integer, Boolean> visited){
+		
+		
+		System.out.println("getVertexCover root="+root+" withRoot="+withRoot+" visited="+visited);
+		
+		
 		int with, without;
 		visited.put(root, true);
 		if(isLeafNode(root)){
@@ -16,9 +21,10 @@ public class Solutionpt07x {
 		}
 		
 		int numberOfChildren = noOfChildren(root);
+		int numberOfNeighbours = noOfNeighbours(root);
 		
 		with = 1;
-		for(int i=0; i<numberOfChildren; i++){
+		for(int i=0; i<numberOfNeighbours && tree[root].get(i)>root; i++){
 			if(!visited.get(tree[root].get(i))){
 				with += getVertexCover(tree[root].get(i) , false, visited);
 				visited.put(tree[root].get(i), false);
@@ -26,26 +32,36 @@ public class Solutionpt07x {
 		}
 		
 		without = numberOfChildren;
-		for(int i=0; i<numberOfChildren; i++){
+		for(int i=0; i<numberOfNeighbours && tree[root].get(i)>root; i++){
 			if(!visited.get(tree[root].get(i))){
 				without += getVertexCover(tree[root].get(i) , true, visited);
 			}
 		}
-		
-
 		return Integer.min(with, without);
 		
 	}
 	private static int noOfChildren(int nodeValue) {
+		int count = 0;
+		for(int neighbour : tree[nodeValue]){
+			if(neighbour > nodeValue)
+				count++;
+		}
 		
-		return tree[nodeValue].size();
-		
+		return count;
 	}
+	
+	private static int noOfNeighbours(int nodeValue) {
+		return tree[nodeValue].size();
+	}
+	
 	public static boolean isLeafNode(int nodeValue){
 	
 		if((tree[nodeValue].size()==1&&nodeValue!=1)  || tree[nodeValue].isEmpty()){
+			System.out.println("isLeafNode "+nodeValue+ " true");
 			return true;
 		}
+		System.out.println("isLeafNode "+nodeValue+ " false");
+		
 		return false;
 	}
 	public static void main(String[] args) {
@@ -83,7 +99,7 @@ public class Solutionpt07x {
 			System.out.println(tree[i]);
 		}
 		
-		System.out.println(Integer.min(getVertexCover(1, true, visited), getVertexCover(1, true, visited)));
+		System.out.println(Integer.min(getVertexCover(1, true, visited), getVertexCover(1, false, visited)));
 
 	}
 
